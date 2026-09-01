@@ -1,73 +1,125 @@
-create table empresa(
-id int primary key,
-nome varchar(255),
-cnpj varchar(255),
-email varchar(255),
-telefone varchar(255),
-endereco varchar(255)
+-- ============================================================
+-- TABELA: EMPRESA
+-- ============================================================
+
+CREATE TABLE empresa (
+    id INT PRIMARY KEY,
+    nome VARCHAR(255),
+    cnpj VARCHAR(255),
+    email VARCHAR(255),
+    telefone VARCHAR(255),
+    endereco VARCHAR(255)
 );
 
-create table entregador(
-id int primary key,
-nome varchar(255),
-cpf varchar(255),
-rg varchar(255),
-celular varchar(255),
-id_empresa int
+
+-- ============================================================
+-- TABELA: ENTREGADOR
+-- ============================================================
+
+CREATE TABLE entregador (
+    id INT PRIMARY KEY,
+    nome VARCHAR(255),
+    cpf VARCHAR(255),
+    rg VARCHAR(255),
+    celular VARCHAR(255),
+    id_empresa INT
 );
 
-create table cliente(          
-telefone varchar(255) primary key,
-nome varchar(255),
-endereco varchar(255),
-pontoreferencia varchar(255),
-nascimento date
+
+-- ============================================================
+-- TABELA: CLIENTE
+-- ============================================================
+
+CREATE TABLE cliente (
+    telefone VARCHAR(255) PRIMARY KEY,
+    nome VARCHAR(255),
+    endereco VARCHAR(255),
+    pontoreferencia VARCHAR(255),
+    nascimento DATE
 );
 
-create table pedido(
-id int primary key,
-status varchar(255),
-taxa_entrega varchar(255),
-data datetime,
-telefone_cliente varchar(255),
-id_entregador int
+
+-- ============================================================
+-- TABELA: PEDIDO
+-- ============================================================
+
+CREATE TABLE pedido (
+    id INT PRIMARY KEY,
+    status VARCHAR(255),
+    taxa_entrega VARCHAR(255),
+    data DATETIME,
+    telefone_cliente VARCHAR(255),
+    id_entregador INT
 );
 
-create table item_pedido(
-quantidade int,
-id_marmita int,
-id_pedido int
+
+-- ============================================================
+-- TABELA: ITEM_PEDIDO
+-- ============================================================
+
+CREATE TABLE item_pedido (
+    quantidade INT,
+    id_marmita INT,
+    id_pedido INT
 );
 
-create table marmita(
-id int primary key,
-nome varchar(255),
-descricao mediumtext,
-tamanho varchar(255),
-valor varchar(255)
+
+-- ============================================================
+-- TABELA: MARMITA
+-- ============================================================
+
+CREATE TABLE marmita (
+    id INT PRIMARY KEY,
+    nome VARCHAR(255),
+    descricao MEDIUMTEXT,
+    tamanho VARCHAR(255),
+    valor VARCHAR(255)
 );
 
-create table login(
-id int primary key,
-email varchar(255),
-senha varchar(255),
-nivel_acesso int
+
+-- ============================================================
+-- TABELA: LOGIN
+-- ============================================================
+
+CREATE TABLE login (
+    id INT PRIMARY KEY,
+    email VARCHAR(255),
+    senha VARCHAR(255),
+    nivel_acesso INT
 );
 
-alter table pedido  
-  add constraint foreign key(telefone_cliente)
-  references cliente(telefone)
-  on delete cascade 
-  on update cascade;
 
-alter table pedido  
-  add constraint foreign key(id_entregador)
-  references entregador(id)
-  on delete cascade 
-  on update cascade;
+-- ============================================================
+-- FOREIGN KEY: PEDIDO → CLIENTE
+-- ============================================================
 
-alter table entregador  
-  add constraint foreign key(id_empresa)
-  references cliente(telefone)
-  on delete cascade 
-  on update cascade;
+ALTER TABLE pedido
+ADD CONSTRAINT fk_pedido_cliente
+FOREIGN KEY (telefone_cliente)
+REFERENCES cliente(telefone)
+ON DELETE CASCADE
+ON UPDATE CASCADE;
+
+
+-- ============================================================
+-- FOREIGN KEY: PEDIDO → ENTREGADOR
+-- ============================================================
+
+ALTER TABLE pedido
+ADD CONSTRAINT fk_pedido_entregador
+FOREIGN KEY (id_entregador)
+REFERENCES entregador(id)
+ON DELETE CASCADE
+ON UPDATE CASCADE;
+
+
+-- ============================================================
+-- FOREIGN KEY: ENTREGADOR → EMPRESA
+-- ============================================================
+
+ALTER TABLE entregador
+ADD CONSTRAINT fk_entregador_empresa
+FOREIGN KEY (id_empresa)
+REFERENCES empresa(id)
+ON DELETE CASCADE
+ON UPDATE CASCADE;

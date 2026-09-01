@@ -1,98 +1,315 @@
-create table vendas (
-nf int not null primary key,
-cod_produto int,
-nome_produto varchar(50),
-qtd_vendida int,
-vlr_desconto numeric(12,2),
-vlr_total numeric(12,2)
-)
+-- ============================================================
+-- TABELA: VENDAS
+-- ============================================================
 
-insert into vendas values
-(1, 101, 'camisa', 2, 40, 260),
-(2, 102, 'calça', 3, 90, 699),
-(3, 103, 'jaqueta', 1, 40, 499),
-(4, 104, 'sapato', 1, 30, 389)
+CREATE TABLE vendas (
+    nf              INT NOT NULL PRIMARY KEY,
+    cod_produto     INT,
+    nome_produto    VARCHAR(50),
+    qtd_vendida     INT,
+    vlr_desconto    NUMERIC(12,2),
+    vlr_total       NUMERIC(12,2)
+);
 
 
+-- ============================================================
+-- INSERINDO DADOS
+-- ============================================================
 
--- Função MAX
-
-select max(vlr_total) as "Maior valor de vendas"
-from vendas
-
-select max(qtd_vendida) as "Maior Quantidade Vendida"
-from vendas
-
-select max(vlr_desconto) as "Maior valor de desconto"
-from vendas
-
-
--- Função MIN
-
-select min(vlr_total) as "Menor valor de vendas"
-from vendas
-
-select min(qtd_vendida) as "Menor Quantidade Vendida"
-from vendas
-
-select min(vlr_desconto) as "Menor valor de desconto"
-from vendas
+INSERT INTO vendas
+VALUES
+    (1, 101, 'Camisa',  2, 40, 260),
+    (2, 102, 'Calça',   3, 90, 699),
+    (3, 103, 'Jaqueta', 1, 40, 499),
+    (4, 104, 'Sapato',  1, 30, 389);
 
 
--- Função SUM
+-- ============================================================
+-- FUNÇÃO MAX()
+-- Retorna o maior valor de uma coluna
+-- ============================================================
 
-select sum(vlr_total) as "Valor total de vendas"
-from vendas
+SELECT MAX(vlr_total) AS "Maior valor de vendas"
+FROM vendas;
 
-select sum(qtd_vendida) as "Quantidade total Vendida"
-from vendas
+SELECT MAX(qtd_vendida) AS "Maior quantidade vendida"
+FROM vendas;
 
-select sum(vlr_desconto) as "Valor total de desconto"
-from vendas
-
-
--- Função AVG
-
-select avg(vlr_total) as "Valor médio de vendas"
-from vendas
-
-select avg(qtd_vendida) as "Quantidade média Vendida"
-from vendas
-
-select avg(vlr_desconto) as "Valor médio de desconto"
-from vendas
+SELECT MAX(vlr_desconto) AS "Maior valor de desconto"
+FROM vendas;
 
 
--- Função COUNT
+-- ============================================================
+-- FUNÇÃO MIN()
+-- Retorna o menor valor de uma coluna
+-- ============================================================
 
-insert into vendas
-values (5, null, 'camisa', 2, 40, 260)
+SELECT MIN(vlr_total) AS "Menor valor de vendas"
+FROM vendas;
 
-select count(*) "Contagem de linhas"
-from vendas
+SELECT MIN(qtd_vendida) AS "Menor quantidade vendida"
+FROM vendas;
 
-select count(cod_produto) "Contagem de linhas"
-from vendas
+SELECT MIN(vlr_desconto) AS "Menor valor de desconto"
+FROM vendas;
 
-select * from vendas
 
--- Operações
--- Cáculos matemáticos simples ou complexos
--- Usa-se () para definir prioridades
+-- ============================================================
+-- FUNÇÃO SUM()
+-- Soma os valores de uma coluna
+-- ============================================================
 
-select nome_produto,
-(vlr_total / qtd_vendida) as "Valor Unitário"
-from vendas
+SELECT SUM(vlr_total) AS "Valor total de vendas"
+FROM vendas;
 
-select (sum(vlr_total) / sum(qtd_vendida)) as "Valor médio"
-from vendas
+SELECT SUM(qtd_vendida) AS "Quantidade total vendida"
+FROM vendas;
 
-+ - / *
+SELECT SUM(vlr_desconto) AS "Valor total de desconto"
+FROM vendas;
 
--- Agrupamento GROUP BY
--- Agrupa valores agregados extratificando os dados
 
-select nome_produto,
-sum(vlr_total) as "Valor total por produto"
-from vendas
-group by 1
+-- ============================================================
+-- FUNÇÃO AVG()
+-- Retorna a média dos valores de uma coluna
+-- ============================================================
+
+SELECT AVG(vlr_total) AS "Valor médio de vendas"
+FROM vendas;
+
+SELECT AVG(qtd_vendida) AS "Quantidade média vendida"
+FROM vendas;
+
+SELECT AVG(vlr_desconto) AS "Valor médio de desconto"
+FROM vendas;
+
+
+-- ============================================================
+-- FUNÇÃO COUNT()
+-- Conta registros
+-- ============================================================
+
+INSERT INTO vendas
+VALUES (5, NULL, 'Camisa', 2, 40, 260);
+
+
+-- Conta todas as linhas
+SELECT COUNT(*) AS "Contagem de linhas"
+FROM vendas;
+
+
+-- Conta apenas valores NÃO NULOS da coluna
+SELECT COUNT(cod_produto) AS "Contagem de linhas"
+FROM vendas;
+
+
+-- Visualiza todos os registros
+SELECT *
+FROM vendas;
+
+
+-- ============================================================
+-- OPERAÇÕES MATEMÁTICAS
+-- ============================================================
+-- Operadores:
+-- +  Adição
+-- -  Subtração
+-- /  Divisão
+-- *  Multiplicação
+--
+-- Parênteses () são usados para definir prioridades
+-- nas operações.
+
+
+-- Valor unitário de cada produto
+SELECT
+    nome_produto,
+    (vlr_total / qtd_vendida) AS "Valor unitário"
+FROM vendas;
+
+
+-- Valor médio geral das vendas
+SELECT
+    (SUM(vlr_total) / SUM(qtd_vendida)) AS "Valor médio"
+FROM vendas;
+
+
+-- ============================================================
+-- AGRUPAMENTO: GROUP BY
+-- ============================================================
+-- Agrupa os registros para permitir operações agregadas
+-- como SUM(), COUNT(), AVG(), MAX() e MIN().
+
+
+-- Valor total vendido por produto
+SELECT
+    nome_produto,
+    SUM(vlr_total) AS "Valor total por produto"
+FROM vendas
+GROUP BY 1;
+
+
+-- ============================================================
+-- TABELA: PRODUTO
+-- ============================================================
+
+CREATE TABLE produto (
+    cod             INT PRIMARY KEY,
+    nome            VARCHAR(50),
+    qtde            INT,
+    cod_categoria   INT,
+    vlr_unitario    NUMERIC(12,2)
+);
+
+
+-- ============================================================
+-- TABELA: CATEGORIA
+-- ============================================================
+
+CREATE TABLE categoria (
+    cod     INT PRIMARY KEY,
+    nome    VARCHAR(20)
+);
+
+
+-- ============================================================
+-- INSERINDO CATEGORIAS
+-- ============================================================
+
+INSERT INTO categoria
+VALUES
+    (1, 'Mercearia'),
+    (2, 'Bebidas'),
+    (4, 'Açougue');
+
+
+-- ============================================================
+-- CRIANDO RELACIONAMENTO ENTRE PRODUTO E CATEGORIA
+-- ============================================================
+-- produto.cod_categoria → categoria.cod
+--
+-- ON DELETE CASCADE:
+-- Se a categoria for excluída, os produtos relacionados
+-- também serão excluídos.
+--
+-- ON UPDATE CASCADE:
+-- Se o código da categoria for alterado, o código relacionado
+-- nos produtos também será atualizado.
+
+
+ALTER TABLE produto
+ADD CONSTRAINT fk_categoria
+FOREIGN KEY (cod_categoria)
+REFERENCES categoria (cod)
+ON DELETE CASCADE
+ON UPDATE CASCADE;
+
+
+-- ============================================================
+-- REMOVENDO A CONSTRAINT
+-- ============================================================
+
+ALTER TABLE produto
+DROP CONSTRAINT fk_categoria;
+
+
+-- ============================================================
+-- INSERINDO PRODUTOS
+-- ============================================================
+
+INSERT INTO produto
+VALUES
+    (1, 'Arroz tipo 1 5kg',    150, 1, 22.50),
+    (2, 'Feijão Carioca 2kg',  120, 1,  6.50),
+    (3, 'Sabão em Pó Omo 1kg', 110, 3, 19.50),
+    (4, 'Pepsi Black 2l',      340, 2,  5.99);
+
+
+-- ============================================================
+-- CONSULTANDO AS TABELAS
+-- ============================================================
+
+SELECT *
+FROM produto;
+
+SELECT *
+FROM categoria;
+
+
+-- ============================================================
+-- INNER JOIN
+-- ============================================================
+-- Retorna apenas os registros que possuem correspondência
+-- nas DUAS tabelas.
+--
+-- Normalmente relacionamos:
+-- PRIMARY KEY (PK) ↔ FOREIGN KEY (FK)
+
+
+SELECT
+    p.nome AS produto,
+    c.nome AS categoria
+FROM produto AS p
+
+INNER JOIN categoria AS c
+    ON p.cod_categoria = c.cod;
+
+
+-- ============================================================
+-- LEFT JOIN
+-- ============================================================
+-- Retorna:
+-- 1. Todos os registros da tabela da ESQUERDA
+-- 2. Os registros correspondentes da tabela da DIREITA
+--
+-- Caso não exista correspondência, os campos da tabela direita
+-- aparecerão como NULL.
+
+
+SELECT
+    p.nome AS produto,
+    c.nome AS categoria
+FROM produto AS p
+
+LEFT JOIN categoria AS c
+    ON p.cod_categoria = c.cod;
+
+
+-- ============================================================
+-- RIGHT JOIN
+-- ============================================================
+-- Retorna:
+-- 1. Todos os registros da tabela da DIREITA
+-- 2. Os registros correspondentes da tabela da ESQUERDA
+--
+-- Caso não exista correspondência, os campos da tabela esquerda
+-- aparecerão como NULL.
+
+
+SELECT
+    p.nome AS produto,
+    c.nome AS categoria
+FROM produto AS p
+
+RIGHT JOIN categoria AS c
+    ON p.cod_categoria = c.cod;
+
+
+-- ============================================================
+-- JOIN + AGREGAÇÃO + GROUP BY
+-- ============================================================
+-- Conta quantos produtos existem em cada categoria.
+
+
+SELECT
+    c.nome AS categoria,
+    COUNT(p.cod) AS "Quantidade de produtos"
+
+FROM produto AS p
+
+INNER JOIN categoria AS c
+    ON p.cod_categoria = c.cod
+
+GROUP BY 1
+
+ORDER BY 1;
