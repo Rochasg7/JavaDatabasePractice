@@ -182,3 +182,20 @@ alter table compra add column id_empresa int;
 
 update compra set id_empresa = 1 where id_produto < 3;
 update compra set id_empresa = 2 where id_produto >= 3;
+
+insert into empresa values(2, 'Empresa 2');
+
+select c.id_produto
+from compra c
+where c.id_empresa in (select id from empresa)
+
+-- -
+
+select c.id_produto,
+	c.id_empresa,
+	(select e.nome 
+	 from empresa e
+	 where e.id =c.id_empresa) as empresa
+from compra c
+
+select nome from empresa
