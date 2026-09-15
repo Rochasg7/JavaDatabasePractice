@@ -162,3 +162,23 @@ inner join produto as p on c.id_produto = p.id
 inner join fornecedor as f on p.id_fornecedor = f.id 
 inner join municipio as m on f.id_municipio = m.id
 where m.uf != 'SP';
+
+-- SUBQUERY
+
+drop table if exists empresa;
+
+create table if not exists empresa(id int, nome varchar(50));
+
+insert into empresa values(1, 'Empresa 1');
+
+select 
+	c.nf,
+	c.id_produto,
+	(select nome from empresa) as empresa
+from compra c
+order by 1
+
+alter table compra add column id_empresa int;
+
+update compra set id_empresa = 1 where id_produto < 3;
+update compra set id_empresa = 2 where id_produto >= 3;
